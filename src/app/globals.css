@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  nav-play,
+  Link {
+
+    color: #475569;
+    background: #fff;
+  }
+  
+  [data-theme='dark'],
+  [data-theme='dark'] body, nav-play, Link {
+    color: #e2e8f0;
+    background: #000;
+  }
+  }
+  
