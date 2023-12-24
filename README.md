@@ -16,7 +16,7 @@ npm i
 
 - (For development)
   - `npm run dev`
-- (For Production)
+- (For Production (Not Tested!))
   - `npm run build`
   - `npm run start`
  
