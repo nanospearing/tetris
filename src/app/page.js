@@ -3,7 +3,19 @@ import Image from "next/image";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, Button, ButtonGroup } from "@nextui-org/react";
 import { GithubIcon, ControllerIcon } from "./components/svgs"
 
+function isMobile() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
 export default function Page() {
+  if (isMobile()) {
+    return (
+      <div>
+        Sorry, this site is not available on mobile.
+      </div>
+    );
+  }
+
   return (
     <div>
       <Navbar isBordered>
