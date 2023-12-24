@@ -21,7 +21,7 @@ export default function Page() {
             </Link>
           </NavbarItem>
           <NavbarItem>
-            <Link href="play" color="foreground">
+            <Link href="./play" color="foreground">
               Play
             </Link>
           </NavbarItem>
