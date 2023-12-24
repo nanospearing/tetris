@@ -58,15 +58,29 @@ export function TetrisDiv() {
     // Draw the initial state
     drawBoard(ctx, board);
     drawPiece(ctx, currentPiece);
+
+    // Set up keyboard event listener
+    window.addEventListener('keydown', handleKeyPress);
+
+    // Clean up keyboard event listener
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
   }, [board, currentPiece]);
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      moveDown();
-    }, fallingSpeed);
+  // Set up automatic downward movement using useInterval
+  useInterval(() => {
+    moveDown();
+  }, fallingSpeed);
 
-    return () => clearInterval(intervalId);
-  }, [isGameOver, fallingSpeed]);
+  // ...
+
+  useEffect(() => {
+    // Check if the score has reached a new level
+    const sortedLevels = [...levelSpeeds].sort((a, b) => b.score - a.score);
+    const currentLevel = sortedLevels.find((level) => score >= level.score) || sortedLevels[0];
+    setFallingSpeed(currentLevel.speed);
+  }, [score]);
 
 
 
@@ -196,9 +210,9 @@ export function TetrisDiv() {
 
     setBoard(newBoard);
     setCurrentPiece(generateRandomPiece());
-    const currentLevel = levelSpeeds.find((level) => score >= level.score) || levelSpeeds[0];
-
-    // Update falling speed based on the current level
+    // Check if the score has reached a new level
+    const sortedLevels = [...levelSpeeds].sort((a, b) => b.score - a.score);
+    const currentLevel = sortedLevels.find((level) => score >= level.score) || sortedLevels[0];
     setFallingSpeed(currentLevel.speed);
   }
 
