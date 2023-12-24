@@ -10,19 +10,19 @@ export default function Page() {
       <Navbar isBordered>
         <NavbarBrand>
           <Link className="gap-4" color="foreground" href="https://github.com/nanospearing/tetris">
-            <Image src="/logo.png" width="48" height="32" alt="A T block Tetris Logo" className="h-8" />
+            <Image src="/tetris/logo.png" width="48" height="32" alt="A T block Tetris Logo" className="h-8" />
             <p className="font-bold text-inherit ">Tetris (but in NodeJS)</p>
           </Link>
         </NavbarBrand>
 
         <NavbarContent className="hidden sm:flex gap-4" justify="end">
           <NavbarItem>
-            <Link color="foreground" href="/">
+            <Link color="foreground" href="/tetris/">
               Info
             </Link>
           </NavbarItem>
           <NavbarItem isActive>
-            <Link href="play" color="foreground">
+            <Link href="/tetris/play" color="foreground">
               Play
             </Link>
           </NavbarItem>
