@@ -174,7 +174,34 @@ export function TetrisDiv() {
         }
       }
     }
+
+    // Draw the shadow
+    const shadowPiece = calculateShadowPosition(currentPiece);
+    drawPieceOutline(ctx, shadowPiece, 'grey');
+
+    // Draw the actual piece
     drawPiece(ctx, currentPiece);
+  }
+  function drawPieceOutline(ctx, piece, outlineColor) {
+    piece.shape.forEach((row, rowIndex) => {
+      row.forEach((cell, colIndex) => {
+        if (cell !== 0) {
+          ctx.fillStyle = 'transparent'; // Make the piece transparent
+          ctx.fillRect((piece.x + colIndex) * 30, (piece.y + rowIndex) * 30, 30, 30);
+          ctx.strokeStyle = outlineColor;
+          ctx.strokeRect((piece.x + colIndex) * 30, (piece.y + rowIndex) * 30, 30, 30);
+        }
+      });
+    });
+  }
+
+  function calculateShadowPosition(piece) {
+    let shadowPiece = { ...piece };
+    while (!checkCollision(shadowPiece)) {
+      shadowPiece = { ...shadowPiece, y: shadowPiece.y + 1 };
+    }
+    shadowPiece = { ...shadowPiece, y: shadowPiece.y - 1 }; // Adjusting the position after collision
+    return shadowPiece;
   }
 
   // Function to move the current piece down
