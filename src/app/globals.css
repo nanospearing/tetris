@@ -9,13 +9,23 @@
   Link {
 
     color: #475569;
+    border: black;
     background: #fff;
   }
   
   [data-theme='dark'],
   [data-theme='dark'] body, nav-play, Link {
     color: #e2e8f0;
+    border: white;
     background: #000;
   }
   }
-  
+  canvas {
+    border: black;
+  }
+  [data-theme='dark'],
+  [data-theme='dark'] canvas {
+    border: white;
+  }
+
+

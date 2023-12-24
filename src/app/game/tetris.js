@@ -321,7 +321,7 @@ export function TetrisDiv() {
         ref={canvasRef}
         width={300}
         height={600}
-        style={{ border: '1px solid black' }}
+        style={{ border: '2px solid' }}
       />
       <p>Score: {score}</p>
       <p>Falling Speed: {fallingSpeed}ms</p>
