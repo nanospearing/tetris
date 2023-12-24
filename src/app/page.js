@@ -1,9 +1,9 @@
 'use client'
 
 import React from "react";
-import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect'; 
+import { BrowserView, MobileView } from 'react-device-detect'; 
 import Image from "next/image";
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, Button, ButtonGroup } from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button } from "@nextui-org/react";
 import { GithubIcon, ControllerIcon } from "./components/svgs"
 
 
