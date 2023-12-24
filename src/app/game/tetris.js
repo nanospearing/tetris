@@ -286,6 +286,8 @@ export function TetrisDiv() {
       { shape: [[1, 1, 1], [0, 0, 1]], x: 3, y: 0, color: 'blue' }, // J
       { shape: [[1, 1, 1], [0, 1, 0]], x: 3, y: 0, color: 'purple' }, // T
       { shape: [[1, 1], [1, 1]], x: 3, y: 0, color: 'yellow' }, // O
+      { shape: [[0, 1, 1], [1, 1, 0]], x: 3, y: 0, color: 'green' }, // S
+      { shape: [[1, 1, 0], [0, 1, 1]], x: 3, y: 0, color: 'red' }, // Z
     ];
     const randomIndex = Math.floor(Math.random() * pieces.length);
     return { ...pieces[randomIndex] };
