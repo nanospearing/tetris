@@ -101,7 +101,7 @@ export function TetrisDiv() {
   }, [gameStarted, board, currentPiece, isPaused, isGameOver]);
   // Set up automatic downward movement using useInterval
   useInterval(() => {
-    if (!isPaused) {
+    if (!isGameOver || !isPaused) {
       moveDown();
     } else return;
   }, fallingSpeed);
@@ -140,6 +140,7 @@ export function TetrisDiv() {
 
   // Function to move the current piece down
   function moveDown() {
+    if (isGameOver) return;
     const newPiece = { ...currentPiece, y: currentPiece.y + 1 };
     if (!checkCollision(newPiece)) {
       setCurrentPiece(newPiece);
@@ -206,11 +207,8 @@ export function TetrisDiv() {
         comboScore = 1200;
       }
 
-      // Fix: Ensure score is a valid number
-      console.log('Combo Score before addition:', comboScore);
       setScore((prevScore) => {
         const newScore = isNaN(prevScore) ? 0 : prevScore + comboScore;
-        console.log('Current Score:', prevScore, 'Combo Score:', comboScore, 'New Score:', newScore);
         return newScore;
       });
 
