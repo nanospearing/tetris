@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 
@@ -49,6 +49,7 @@ export function TetrisDiv() {
   const [isGameOver, setIsGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [fallingSpeed, setFallingSpeed] = useState(levelSpeeds[0].speed);
+  const [isPaused, setIsPaused] = useState(false);
 
 
   useEffect(() => {
@@ -59,20 +60,43 @@ export function TetrisDiv() {
     drawBoard(ctx, board);
     drawPiece(ctx, currentPiece);
 
-    // Set up keyboard event listener
+    const handleKeyPress = (e) => {
+      if (e.key === 'p') {
+        setIsPaused(!isPaused);
+      } else if (!isGameOver && !isPaused) {
+        switch (e.key) {
+          case 'ArrowLeft':
+            moveLeft();
+            break;
+          case 'ArrowRight':
+            moveRight();
+            break;
+          case 'ArrowDown':
+            moveDown();
+            break;
+          case 'ArrowUp':
+            rotatePiece();
+            break;
+          default:
+            break;
+        }
+      }
+    }
+
     window.addEventListener('keydown', handleKeyPress);
 
     // Clean up keyboard event listener
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
-  }, [board, currentPiece]);
+  }, [board, currentPiece, isPaused]);
 
   // Set up automatic downward movement using useInterval
   useInterval(() => {
-    moveDown();
+    if (!isPaused) {
+      moveDown();
+    } else return;
   }, fallingSpeed);
-
   // ...
 
   useEffect(() => {
@@ -92,7 +116,7 @@ export function TetrisDiv() {
 
   // Function to draw the Tetris board
   function drawBoard(ctx, board) {
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.clearRect(0, 0, board[0].length * 30, board.length * 30);
     for (let row = 0; row < board.length; row++) {
       for (let col = 0; col < board[row].length; col++) {
         if (board[row][col] !== 0) {
@@ -104,20 +128,6 @@ export function TetrisDiv() {
       }
     }
     drawPiece(ctx, currentPiece);
-  }
-
-  // Function to draw the current falling piece
-  function drawPiece(ctx, piece) {
-    piece.shape.forEach((row, rowIndex) => {
-      row.forEach((cell, colIndex) => {
-        if (cell !== 0) {
-          ctx.fillStyle = 'red'; // Customize the color
-          ctx.fillRect((piece.x + colIndex) * 30, (piece.y + rowIndex) * 30, 30, 30);
-          ctx.strokeStyle = 'white';
-          ctx.strokeRect((piece.x + colIndex) * 30, (piece.y + rowIndex) * 30, 30, 30);
-        }
-      });
-    });
   }
 
   // Function to move the current piece down
@@ -252,28 +262,6 @@ export function TetrisDiv() {
     });
   }
 
-  // Function to handle keyboard input
-  function handleKeyPress(e) {
-    if (!isGameOver) {
-      switch (e.key) {
-        case 'ArrowLeft':
-          moveLeft();
-          break;
-        case 'ArrowRight':
-          moveRight();
-          break;
-        case 'ArrowDown':
-          moveDown();
-          break;
-        case 'ArrowUp':
-          rotatePiece();
-          break;
-        default:
-          break;
-      }
-    }
-  }
-
   // Function to move the current piece left
   function moveLeft() {
     const newPiece = { ...currentPiece, x: currentPiece.x - 1 };
@@ -316,31 +304,13 @@ export function TetrisDiv() {
     return rotatedMatrix;
   }
 
-  // Set up keyboard event listener
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-    };
-  }, [currentPiece, isGameOver]);
-
-  // Set up automatic downward movement using useInterval
-  useInterval(() => {
-    moveDown();
-  }, fallingSpeed);
-
   return (
     <div>
-      <canvas
-        ref={canvasRef}
-        width={300}
-        height={600}
-        style={{ border: '2px solid' }}
-      />
+      <canvas ref={canvasRef} width={300} height={600} style={{ border: '2px solid' }} />
       <p>Score: {score}</p>
       <p>Falling Speed: {fallingSpeed}ms</p>
+      {isPaused && <p>Paused</p>}
       {isGameOver && <p>Game Over!</p>}
-
     </div>
   );
 
