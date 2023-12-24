@@ -117,6 +117,9 @@ export function TetrisDiv() {
             case 'ArrowUp':
               rotatePiece();
               break;
+            case ' ': // Space bar
+              hardDrop();
+              break;
             default:
               break;
           }
@@ -355,6 +358,15 @@ export function TetrisDiv() {
       audioRef.current.play();
     }
   };
+
+  function hardDrop() {
+    let newPiece = { ...currentPiece };
+    while (!checkCollision(newPiece)) {
+      newPiece = { ...newPiece, y: newPiece.y + 1 };
+    }
+    newPiece = { ...newPiece, y: newPiece.y - 1 }; // Adjusting the position after collision
+    setCurrentPiece(newPiece);
+  }
 
   return (
     <div>
