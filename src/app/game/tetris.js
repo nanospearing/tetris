@@ -23,6 +23,33 @@ function useInterval(callback, delay) {
 
 // Tetris component
 export function TetrisDiv() {
+
+  const setCookie = (name, value, days) => {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+  };
+
+
+  const getCookie = (name) => {
+    const cookieName = `${name}=`;
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      let cookie = cookies[i].trim();
+      if (cookie.indexOf(cookieName) === 0) {
+        return cookie.substring(cookieName.length, cookie.length);
+      }
+    }
+    return '';
+  };
+
+
+  const [highScore, setHighScore] = useState(() => {
+    const savedHighScore = getCookie('highScore');
+    return savedHighScore ? parseInt(savedHighScore, 10) : 0;
+  });
+
+
   const levelSpeeds = [
     { score: 0, speed: 1000 },     // Level 1
     { score: 100, speed: 800 },     // Level 2
@@ -51,6 +78,7 @@ export function TetrisDiv() {
   const [fallingSpeed, setFallingSpeed] = useState(levelSpeeds[0].speed);
   const [isPaused, setIsPaused] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+
 
 
   const handleStartButtonClick = () => {
@@ -101,7 +129,7 @@ export function TetrisDiv() {
   }, [gameStarted, board, currentPiece, isPaused, isGameOver]);
   // Set up automatic downward movement using useInterval
   useInterval(() => {
-    if (!isGameOver || !isPaused) {
+    if (!isPaused) {
       moveDown();
     } else return;
   }, fallingSpeed);
@@ -112,7 +140,11 @@ export function TetrisDiv() {
     const sortedLevels = [...levelSpeeds].sort((a, b) => b.score - a.score);
     const currentLevel = sortedLevels.find((level) => score >= level.score) || sortedLevels[0];
     setFallingSpeed(currentLevel.speed);
-  }, [score]);
+    if (score > highScore) {
+      setHighScore(score);
+      setCookie('highScore', score, 365); // Save to cookies with a one-year expiration
+    }
+  }, [score, highScore]);
 
 
 
@@ -335,7 +367,7 @@ export function TetrisDiv() {
           <canvas ref={canvasRef} width={300} height={600} style={{ border: '2px solid' }} />
           {canvasRef.current && ( // Check if canvasRef is available before rendering Tetris board
             <>
-              <p>Score: {score}</p>
+              <p>High Score: {highScore} Score: {score}</p>
               <p>Falling Speed: {fallingSpeed}ms</p>
               {isPaused && <p>Paused</p>}
               {isGameOver && <p>Game Over!</p>}
