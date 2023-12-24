@@ -50,47 +50,55 @@ export function TetrisDiv() {
   const [score, setScore] = useState(0);
   const [fallingSpeed, setFallingSpeed] = useState(levelSpeeds[0].speed);
   const [isPaused, setIsPaused] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
+
+
+  const handleStartButtonClick = () => {
+    setGameStarted(true);
+  };
 
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
+    if (gameStarted) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext('2d');
+      playAudio();
 
-    // Draw the initial state
-    drawBoard(ctx, board);
-    drawPiece(ctx, currentPiece);
+      // Draw the initial state
+      drawBoard(ctx, board);
+      drawPiece(ctx, currentPiece);
 
-    const handleKeyPress = (e) => {
-      if (e.key === 'p') {
-        setIsPaused(!isPaused);
-      } else if (!isGameOver && !isPaused) {
-        switch (e.key) {
-          case 'ArrowLeft':
-            moveLeft();
-            break;
-          case 'ArrowRight':
-            moveRight();
-            break;
-          case 'ArrowDown':
-            moveDown();
-            break;
-          case 'ArrowUp':
-            rotatePiece();
-            break;
-          default:
-            break;
+      const handleKeyPress = (e) => {
+        if (e.key === 'p') {
+          setIsPaused(!isPaused);
+        } else if (!isGameOver && !isPaused) {
+          switch (e.key) {
+            case 'ArrowLeft':
+              moveLeft();
+              break;
+            case 'ArrowRight':
+              moveRight();
+              break;
+            case 'ArrowDown':
+              moveDown();
+              break;
+            case 'ArrowUp':
+              rotatePiece();
+              break;
+            default:
+              break;
+          }
         }
-      }
+      };
+
+      window.addEventListener('keydown', handleKeyPress);
+
+      // Clean up keyboard event listener
+      return () => {
+        window.removeEventListener('keydown', handleKeyPress);
+      };
     }
-
-    window.addEventListener('keydown', handleKeyPress);
-
-    // Clean up keyboard event listener
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-    };
-  }, [board, currentPiece, isPaused]);
-
+  }, [gameStarted, board, currentPiece, isPaused, isGameOver]);
   // Set up automatic downward movement using useInterval
   useInterval(() => {
     if (!isPaused) {
@@ -304,13 +312,40 @@ export function TetrisDiv() {
     return rotatedMatrix;
   }
 
+  const audioRef = React.useRef(null);
+
+  const playAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.play();
+    }
+  };
+
   return (
     <div>
-      <canvas ref={canvasRef} width={300} height={600} style={{ border: '2px solid' }} />
-      <p>Score: {score}</p>
-      <p>Falling Speed: {fallingSpeed}ms</p>
-      {isPaused && <p>Paused</p>}
-      {isGameOver && <p>Game Over!</p>}
+      {!gameStarted && (
+        <div className="flex flex-col items-center justify-center mt-8 space-y-4">
+          <h1 className="text-8xl">Welcome to Tetris!</h1>
+          <button onClick={handleStartButtonClick}>Start Game</button>
+        </div>
+      )}
+      {gameStarted && (
+        <>
+          <audio ref={audioRef} loop>
+            <source src="/tetris/Korobeiniki.ogg" type="audio/ogg" />
+            Sorry but your browser does not support the background music.
+          </audio>
+          <canvas ref={canvasRef} width={300} height={600} style={{ border: '2px solid' }} />
+          {canvasRef.current && ( // Check if canvasRef is available before rendering Tetris board
+            <>
+              <p>Score: {score}</p>
+              <p>Falling Speed: {fallingSpeed}ms</p>
+              {isPaused && <p>Paused</p>}
+              {isGameOver && <p>Game Over!</p>}
+
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 

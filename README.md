@@ -30,3 +30,7 @@ ___
 - https://tetris.wiki/Scoring (Scoring based off of Original BPS)
 - https://tetris.wiki/Tetris_Guideline (Blocks and rules)
 - Official Tetris logo for logo design
+
+## Licensing
+- Korobeiniki.ogg (This file has been identified as being free of known restrictions under copyright law, including all related and neighboring rights.)
+  - [Source](https://commons.wikimedia.org/wiki/File:Korobeiniki.ogg)
